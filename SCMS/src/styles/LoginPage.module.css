@@ -1,0 +1,106 @@
+@font-face {
+  font-family: 'Myriad Pro';
+  src: url('../fonts/MyriadPro-Regular.woff2') format('woff2'),
+       url('../fonts/MyriadPro-Regular.woff') format('woff'),
+       url('../public/fonts/MYRIADPRO-REGULAR.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.loginContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f4f4;
+  font-family: 'Myriad Pro', sans-serif;
+}
+
+.loginLogo {
+  width: 180px;
+  margin-bottom: 20px;
+}
+
+.loginBox {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
+}
+
+h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+label {
+  display: block;
+  text-align: left;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.continueBtn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #473535; /* Change this to one of your provided colors */
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.continueBtn:hover {
+  background-color: #0033aa;
+}
+
+.signupText {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.signupText a {
+  color: #0044cc;
+  text-decoration: none;
+}
+
+.signupText a:hover {
+  text-decoration: underline;
+}
+
+.orSeparator {
+  margin: 15px 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: #777;
+}
+
+.footerLinks {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.footerLinks a {
+  color: #0044cc;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.footerLinks a:hover {
+  text-decoration: underline;
+}
