@@ -1,0 +1,158 @@
+/* ------------------------------------ */
+/*  1. FONT: Myriad Pro (if available)  */
+/* ------------------------------------ */
+@font-face {
+    font-family: 'Myriad Pro';
+    src: url('/fonts/MyriadPro.woff2') format('woff2'),
+         url('/fonts/MyriadPro.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  /* Fallback to sans-serif if Myriad Pro not found */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Myriad Pro', sans-serif;
+    background-color: #ffffff;
+    align-items: center;
+    justify-content: center;
+    color: #3c3c3c;
+    
+  }
+
+  
+  /* ------------------------------------ */
+  /*  2. LOADING SCREEN (Selection Form)  */
+  /* ------------------------------------ */
+  .selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    padding-top: 50px; /* So it’s not hugging the top */
+    box-sizing: border-box;
+    margin-top: 150px;
+    
+  }
+  
+  .logo-image {
+    /* Crop the right side a bit */
+    width: 400px;            /* Overall width */
+    height: 60px;            /* Fix a height so we can crop */
+    margin-bottom: 20px;
+    margin-right: 45px;
+    object-fit: cover;       /* Allows cropping */
+    object-position: 20% 50%;/* Shift the image so right side is cropped */
+  }
+  
+  /* The box that wraps the dropdowns and button */
+  .selection-box {
+    width: 400px;
+    border: none; /* Remove border */
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* "Lifted" look */
+  }
+  
+  /* Label styling */
+  .field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    border-color: #333;
+    font-weight: normal; /* or bold if you prefer */
+  }
+  
+  /* Dropdown styling */
+  /* Dropdown styling */
+.dropdown-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #d9d9d9; /* Lighter grey border */
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #3f3f3f;
+    outline: none; /* Remove outline */
+    font-family: 'Myriad Pro', sans-serif;
+  }
+  
+  /* Highlight effect on focus */
+  .dropdown-input:focus {
+    border-color: #4e4e4e; /* Darker grey when active */
+    box-shadow: 0 0 5px rgba(136, 136, 136, 0.5); /* Soft glow effect */
+  }
+  
+  
+  /* Continue button */
+  .continue-button {
+    width: 100%;
+    background-color: #371f15; /* Brown color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    
+  }
+  
+  .continue-button:disabled {
+    opacity: 1;
+    cursor: not-allowed;
+    border-radius: 10px;
+  }
+  
+  /* ------------------------------------ */
+  /*  3. TIMETABLE DISPLAY                */
+  /* ------------------------------------ */
+  .timetable-container {
+    padding: 20px;
+    text-align: center;
+    min-height: 100vh;
+    background-color: #fff;
+    box-sizing: border-box;
+  }
+  
+  .timetable-heading {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000;
+  }
+  
+  .timetable-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 600px; /* Keep the timetable centered & narrower */
+  }
+  
+  .timetable-item {
+    border-bottom: 1px solid #ccc;
+    padding: 15px 0;
+  }
+  
+  .timetable-subject {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    color: #000;
+  }
+  
+  .timetable-time {
+    font-size: 14px;
+    color: #333;
+    margin: 5px 0 0 0;
+  }
+  
+  .no-schedule {
+    font-size: 16px;
+    color: #000;
+  }
+  
