@@ -1,14 +1,18 @@
-Smart Classroom Management
-Smart Classroom Management is a comprehensive solution designed to streamline classroom operations, enhance student engagement, and support educators in delivering effective instruction. By integrating modern technologies, this program aims to create a more organized and interactive learning environment.​
+# Smart Classroom Management
 
-Features
-Automated Administrative Tasks: Reduces the bureaucratic workload on teachers by automating tasks such as attendance tracking, scheduling, and resource management. ​
-The Daily Telegraph
+**Smart Classroom Management** is a comprehensive solution designed to streamline classroom operations, enhance student engagement, and support educators in delivering effective instruction.  
+By integrating modern technologies, this program aims to create a more organized and interactive learning environment.
 
-Real-Time Student Monitoring: Provides tools for teachers to monitor student activities on their devices, ensuring students remain focused and on-task during lessons. ​
-The Verge
+## Features
 
-Privacy-Focused Design: Implements monitoring features that respect student privacy, fostering trust and encouraging authentic engagement. ​
-Teen Vogue
+- **Automated Administrative Tasks**  
+  Reduces the bureaucratic workload on teachers by automating tasks such as attendance tracking, scheduling, and resource management.
 
-Interactive Learning Tools: Integrates collaborative platforms like online whiteboards and brainstorming tools to facilitate group work and interactive learning experiences. ​
+- **Real-Time Student Monitoring**  
+  Provides tools for teachers to monitor student activities on their devices, ensuring students remain focused and on-task during lessons.
+
+- **Privacy-Focused Design**  
+  Implements monitoring features that respect student privacy, fostering trust and encouraging authentic engagement.
+
+- **Interactive Learning Tools**  
+  Integrates collaborative platforms like online whiteboards and brainstorming tools to facilitate group work and interactive learning experiences.
