@@ -4,7 +4,6 @@ pydantic==2.10.3
 pydantic-extra-types==2.10.1
 pydantic-settings==2.7.0
 pydantic_core==2.27.1
-psycopg2==2.9.9
 psycopg2-binary==2.9.9
 uvicorn==0.32.1
 
