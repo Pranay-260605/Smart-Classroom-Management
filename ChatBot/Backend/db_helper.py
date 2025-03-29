@@ -5,7 +5,7 @@ DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:54
 
 def get_attendance(subject: str, roll: int):
     connection = None
-    curson = None
+    cursor = None
     try:
         connection = psycopg2.connect(DB_URL, sslmode="require")
         cursor = connection.cursor()
