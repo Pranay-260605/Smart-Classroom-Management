@@ -9,7 +9,7 @@ import json
 import psycopg2
 import psycopg2.extras
 
-DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:6543/postgres"
+DB_URL = "postgresql://postgres.iocnbbqkijfuqjuikmfn:pgoel2010@aws-0-ap-south-1.pooler.supabase.com:5432/postgres"
 
 app = FastAPI()
 
