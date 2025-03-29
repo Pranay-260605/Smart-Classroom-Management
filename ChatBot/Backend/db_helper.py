@@ -4,9 +4,12 @@ import psycopg2.extras
 DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:5432/postgres"
 
 def get_attendance(subject: str, roll: int):
+    connection = None
+    curson = None
     try:
         connection = psycopg2.connect(DB_URL, sslmode="require")
         cursor = connection.cursor()
+        print("Connected successfully!")
 
         roll_query = "SELECT DISTINCT roll_no FROM attendance_report"
         cursor.execute(roll_query)
@@ -14,6 +17,7 @@ def get_attendance(subject: str, roll: int):
 
         subject_query = "SELECT DISTINCT subject FROM attendance_report"
         cursor.execute(subject_query)
+        print("Query executed")
         subjects = {row[0].lower() for row in cursor.fetchall()}
 
         if roll not in roll_numbers:
@@ -24,7 +28,7 @@ def get_attendance(subject: str, roll: int):
         query = "SELECT attendance_percentage FROM attendance_report WHERE roll_no = %s AND LOWER(subject) = LOWER(%s)"
         cursor.execute(query, (roll, subject))
         result = cursor.fetchone()
-
+        print(result)
         return f"Attendance for {subject}: {result[0]}" if result else None
 
     except psycopg2.Error:
