@@ -1,7 +1,7 @@
 import psycopg2
 import psycopg2.extras
 
-DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:5432/postgres"
+DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:6543/postgres"
 
 def get_attendance(subject: str, roll: int):
     connection = None
