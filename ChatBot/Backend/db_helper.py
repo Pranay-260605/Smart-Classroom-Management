@@ -103,6 +103,7 @@ def save_appointment_details(instructor: str, time_period: str, day: str):
         return f"Appointment booked with {instructor} on {day} at {time_period}"
 
     except psycopg2.Error:
+        print("iNSIDE EXCEPT")
         return None
     finally:
         if cursor:
