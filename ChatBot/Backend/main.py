@@ -7,6 +7,7 @@ import re
 from datetime import datetime
 import json
 
+DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:5432/postgres"
 
 app = FastAPI()
 
@@ -158,6 +159,22 @@ async def webhook_handler(request : Request):
     except Exception as e:
         print("Error in Webhook:", str(e))
         raise HTTPException(status_code=400, detail=str(e))
+
+def test_db_connection():
+    try:
+        print("🔄 Attempting to connect to the database...")
+        connection = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = connection.cursor()
+        cursor.execute("SELECT 1;")  # Simple test query
+        result = cursor.fetchone()
+        print(f"✅ Database connection successful! Result: {result}")
+        cursor.close()
+        connection.close()
+    except Exception as e:
+        print(f"❌ Database Connection Failed: {e}")
+
+# Call this function at startup
+test_db_connection()
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
