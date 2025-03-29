@@ -32,6 +32,7 @@ def get_attendance(subject: str, roll: int):
         return f"Attendance for {subject}: {result[0]}" if result else None
 
     except psycopg2.Error:
+        print("here")
         return None
     finally:
         if cursor:
