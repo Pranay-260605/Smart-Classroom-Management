@@ -6,6 +6,8 @@ import db_helper
 import re
 from datetime import datetime
 import json
+import psycopg2
+import psygopg2.extras
 
 DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:5432/postgres"
 
