@@ -16,6 +16,7 @@ app = FastAPI()
 def handle_attendance_fetch(parameters: dict, session_id: str):
     subjects = parameters.get("subject", [])
     roll = parameters.get("roll_number", [])
+    print(subjects, roll)
 
     if not roll or not subjects:
         return {"fulfillmentText" : "Could not fetch your attendance. Please provide your roll number and subject to fetch attendance."}
@@ -29,6 +30,7 @@ def handle_attendance_fetch(parameters: dict, session_id: str):
             missing_subjects.append(subject)
         else:
             results.append(result)
+    print(results)
 
     if missing_subjects:
         return {
