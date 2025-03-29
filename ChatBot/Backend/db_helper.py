@@ -1,109 +1,106 @@
-import mysql.connector
-global db_config
+import psycopg2
+import psycopg2.extras
 
-db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'pgoel2010',
-    'database': 'school_management_system'
-}
+DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:5432/postgres"
 
-def get_attendance(subject : str, roll : int):
+def get_attendance(subject: str, roll: int):
     try:
-        connection = mysql.connector.connect(**db_config)
+        connection = psycopg2.connect(DB_URL, sslmode="require")
         cursor = connection.cursor()
 
         roll_query = "SELECT DISTINCT roll_no FROM attendance_report"
         cursor.execute(roll_query)
-        roll_numbers = {roll[0] for roll in cursor.fetchall()}
+        roll_numbers = {row[0] for row in cursor.fetchall()}
 
         subject_query = "SELECT DISTINCT subject FROM attendance_report"
         cursor.execute(subject_query)
-        subjects = {subject[0].lower() for subject in cursor.fetchall()}
-        
+        subjects = {row[0].lower() for row in cursor.fetchall()}
+
         if roll not in roll_numbers:
-            return f"There is no entry for roll number : {roll}. Please provide correct roll number."
-        if subject not in subjects:
-            return f"No entry found for {subject}. Please provide correct subject."
-        
-        query = "SELECT attendance_percentage FROM attendance_report WHERE roll_no = %s AND subject = %s"
-        cursor.execute(query, (roll, subject,))
+            return f"There is no entry for roll number: {roll}. Please provide the correct roll number."
+        if subject.lower() not in subjects:
+            return f"No entry found for {subject}. Please provide the correct subject."
+
+        query = "SELECT attendance_percentage FROM attendance_report WHERE roll_no = %s AND LOWER(subject) = LOWER(%s)"
+        cursor.execute(query, (roll, subject))
         result = cursor.fetchone()
 
-        if result:
-            attendance = result[0]
-            return f"Attendance for {subject}: {attendance}"
-        else:
-            return None
+        return f"Attendance for {subject}: {result[0]}" if result else None
 
-
-    except mysql.connector.Error as err:
-        print(f"Error : {err}")
-
+    except psycopg2.Error:
+        return None
     finally:
         if cursor:
             cursor.close()
+        if connection:
+            connection.close()
 
-def get_instructor_details(subject : str):
+
+def get_instructor_details(subject: str):
     try:
-        connection = mysql.connector.connect(**db_config)
-        cursor = connection.cursor()
+        connection = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        query = "SELECT DISTINCT instructor_name, day, time FROM faculty_slots WHERE LOWER(subject) = LOWER(%s)"
-        cursor.execute(query, (subject.lower(),))
-
+        query = '''
+            SELECT instructor_name, day, time 
+            FROM instructor_details 
+            JOIN faculty_slots ON instructor_details.instructor_id = faculty_slots.instructor_id
+            WHERE LOWER(subject) = LOWER(%s)
+        '''
+        cursor.execute(query, (subject,))
         rows = cursor.fetchall()
-        if not rows:
-            print("No data found for the given subject.")
-            return None
-        columns = ['Instructor_Name', 'Day', 'Time']
-        result = [dict(zip(columns, row)) for row in rows]
 
-        return result
-    
-    except mysql.connector.Error as err:
-        print(f"Error : {err}")
-    
+        return [dict(row) for row in rows] if rows else None
+
+    except psycopg2.Error:
+        return None
     finally:
         if cursor:
             cursor.close()
+        if connection:
+            connection.close()
+
 
 def save_appointment_details(instructor: str, time_period: str, day: str):
     try:
-        connection = mysql.connector.connect(**db_config)
-        cursor = connection.cursor()
-        
-        instructor_id_query = "SELECT instructor_id FROM instructor_details WHERE LOWER(instructor_name) = LOWER(%s)"
-        cursor.execute(instructor_id_query, (instructor.lower(),))
+        connection = psycopg2.connect(DB_URL, sslmode="require")
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
+        print("query execting")
+        instructor_id_query = "SELECT instructor_id FROM instructor_details WHERE LOWER(instructor_name) = LOWER(%s)"
+        cursor.execute(instructor_id_query, (instructor,))
+        print("query executed")
         result = cursor.fetchone()
-        if result:
-            id = result[0]
-        else:
+
+        if not result:
             return None
-        
-        query = "SELECT * FROM faculty_slots WHERE instructor_id = %s AND LOWER(day) = LOWER(%s) AND LOWER(time) = Lower(%s)"
-        cursor.execute(query, (id, day.lower(), time_period.lower(),))
-        
+
+        instructor_id = result['instructor_id']
+        print(instructor_id)
+
+        query = "SELECT * FROM faculty_slots WHERE instructor_id = %s AND LOWER(day) = LOWER(%s) AND LOWER(time) = LOWER(%s)"
+        cursor.execute(query, (instructor_id, day, time_period))
         row = cursor.fetchall()
+        print(instructor_id, day, time_period)
+        print(row)
         if not row:
             return None
-        
-        columns = ['instructor_id', 'instructor_name', 'subject', 'day', 'time']
-        result = [dict(zip(columns, data)) for data in row]
-        
-        insertion_query = "INSERT INTO appointment_details VALUES (%s, %s, %s, %s, %s)"
+
+        result_data = [dict(data) for data in row]
+
+        insertion_query = "INSERT INTO appointment_details VALUES (%s, %s, %s)"
         cursor.execute(
             insertion_query,
-            (result[0].get(columns[0]), result[0].get(columns[1]), result[0].get(columns[2]), result[0].get(columns[3]), result[0].get(columns[4]))
+            (result_data[0]['instructor_id'], result_data[0]['day'], result_data[0]['time'])
         )
+        connection.commit()
+        print("here")
+        return f"Appointment booked with {instructor} on {day} at {time_period}"
 
-        message = f"Appointment booked with {result[0].get(columns[1])} on {day} at {time_period}"
-        return message
-
-    except mysql.connector.Error as err:
-        print(f"Error : {err}]")
-    
+    except psycopg2.Error:
+        return None
     finally:
         if cursor:
             cursor.close()
+        if connection:
+            connection.close()

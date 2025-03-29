@@ -55,7 +55,6 @@ def handle_appointment_booking(parameters: dict, session_id: str):
             "fulfillmentText": "No data found for the given subject. Please try again."
         }
 
-    # Rich Content format for Dialogflow Messenger
     messages = [
         {"text": {"text": ["Here are the available instructors:"]}},
         {
@@ -66,7 +65,7 @@ def handle_appointment_booking(parameters: dict, session_id: str):
                             "type": "chips",
                             "options": [
                                 {
-                                    "text": f"{instructor['Instructor_Name']} - {instructor['Day']} ({instructor['Time']})"
+                                    "text": f"{instructor['instructor_name']} - {instructor['day']} ({instructor['time']})"
                                 }
                                 for instructor in result
                             ]
@@ -76,36 +75,66 @@ def handle_appointment_booking(parameters: dict, session_id: str):
             }
         }
     ]
-
-    messages.append({"text": {"text": ["Please select one of the option"]}})
+    
+    
+    messages.append({"text": {"text": ["Please select one of the options"]}})
+    
     return {"fulfillmentMessages": messages}
 
+
 def handle_appointment_save(parameters: dict, session_id: str):
+    # Ensure you have valid parameters
     instructor = parameters.get("instructor")
     time_period = parameters.get("time-period")
-    start_time = re.findall(r'.*T(..:..)', time_period.get('startTime'))[0]
-    start_time = datetime.strptime(start_time, "%H:%M").strftime("%I:%M").lstrip("0")
-    end_time = re.findall(r'.*T(..:..)', time_period.get('endTime'))[0]
-    end_time = datetime.strptime(end_time, "%H:%M").strftime("%I:%M").lstrip("0")
-    time = start_time + '-' + end_time + " PM"
-
     day = parameters.get("day")
 
-    if not all([instructor, time, day]):
+    # Validate that all required parameters are present
+    if not all([instructor, time_period, day]):
+        print("Missing required parameters.")
+        return {
+            "fulfillmentText": "Error while booking appointment. Please provide all the necessary information."
+        }
+
+    # Extract start and end times from the time period
+    try:
+        start_time = re.findall(r'.*T(..:..)', time_period.get('startTime'))[0]
+        start_time = datetime.strptime(start_time, "%H:%M").strftime("%I:%M").lstrip("0")
+        
+        end_time = re.findall(r'.*T(..:..)', time_period.get('endTime'))[0]
+        end_time = datetime.strptime(end_time, "%H:%M").strftime("%I:%M").lstrip("0")
+        
+        time = start_time + '-' + end_time + " PM"
+    except Exception as e:
+        print(f"Error extracting time: {e}")
+        return {
+            "fulfillmentText": "Error while processing the time. Please try again."
+        }
+
+    # Log the extracted parameters for debugging
+    print(f"Booking appointment with instructor: {instructor}, Time: {time}, Day: {day}")
+
+    # Call the DB function to save the appointment
+    try:
+        message = db_helper.save_appointment_details(instructor=instructor.get('name'), time_period=time, day=day)
+    except Exception as e:
+        print(f"Error while saving appointment: {e}")
         return {
             "fulfillmentText": "Error while booking appointment. Please try again."
         }
-    
-    message = db_helper.save_appointment_details(instructor=instructor.get('name'), time_period=time, day=day)
     
     if message is None:
+        print("No message returned from the database function.")
         return {
             "fulfillmentText": "Error while booking appointment. Please try again."
         }
     
-    return {
+    # Return the message to Dialogflow
+    response = {
         "fulfillmentText": message
     }
+    print(f"Response to Dialogflow: {response}")
+    return response
+
 
 
 @app.post("/webhook")
