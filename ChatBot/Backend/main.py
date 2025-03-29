@@ -5,6 +5,7 @@ import generic_helper
 import db_helper
 import re
 from datetime import datetime
+import json
 
 
 app = FastAPI()
@@ -141,6 +142,7 @@ def handle_appointment_save(parameters: dict, session_id: str):
 async def webhook_handler(request : Request):
     try:
         body = await request.json()
+        print("Received Webhook Request:", json.dumps(body, indent=2))
 
         intent = body["queryResult"]["intent"]["displayName"]
         parameters = body["queryResult"]["parameters"]
@@ -154,6 +156,7 @@ async def webhook_handler(request : Request):
         return intent_handler_dict[intent](parameters=parameters, session_id=session_id)
     
     except Exception as e:
+        print("Error in Webhook:", str(e))
         raise HTTPException(status_code=400, detail=str(e))
 
 if __name__ == "__main__":
