@@ -4,19 +4,37 @@ import uvicorn
 import generic_helper
 import db_helper
 import re
+import numpy as np
 from datetime import datetime
 import json
 import psycopg2
 import psycopg2.extras
 
-DB_URL = "postgresql://postgres.iocnbbqkijfuqjuikmfn:pgoel2010@aws-0-ap-south-1.pooler.supabase.com:5432/postgres"
+DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:6543/postgres"
 
 app = FastAPI()
+
+def handle_welcome_intent(parameters: dict, session_id: str):
+    responses = [
+        "Hi! How are you doing? You can begin with 'Appointment Booking,' or 'Attendance Report.'",
+        "Hello! Hope you're doing well. Start by saying 'Appointment Booking,' or 'Attendance Report.'",
+        "Hey there! How's your day going? You may begin with 'Appointment Booking,' or 'Attendance Report.'",
+        "Hi! Hope you're having a great day. You can start with 'Appointment Booking,' or 'Attendance Report.'",
+        "Hello! How's it going? Feel free to start with 'Appointment Booking,' or 'Attendance Report.'",
+        "Hey! How are you today? Pick an option to begin: 'Appointment Booking,' or 'Attendance Report.'",
+        "Hi! Hope you're doing well. Start by selecting 'Appointment Booking,' or 'Attendance Report.'",
+        "Hello! How's your day been? You can kick things off with 'Appointment Booking,' or 'Attendance Report.'",
+        "Hi! How’s everything going? Choose one to get started: 'Appointment Booking,' or 'Attendance Report.'",
+        "Hey there! Hope you're having a good day. Begin by selecting 'Appointment Booking,' or 'Attendance Report.'"
+    ]
+    idx = np.random.randint(low=0, high=10)
+    return {
+        "fulfillmentText": responses[idx]
+    }
 
 def handle_attendance_fetch(parameters: dict, session_id: str):
     subjects = parameters.get("subject", [])
     roll = parameters.get("roll_number", [])
-    print(subjects, roll)
 
     if not roll or not subjects:
         return {"fulfillmentText" : "Could not fetch your attendance. Please provide your roll number and subject to fetch attendance."}
@@ -30,7 +48,6 @@ def handle_attendance_fetch(parameters: dict, session_id: str):
             missing_subjects.append(subject)
         else:
             results.append(result)
-    print(results)
 
     if missing_subjects:
         return {
@@ -154,6 +171,7 @@ async def webhook_handler(request : Request):
         session_id = generic_helper.extract_session_id(str(body['session']))
 
         intent_handler_dict = {
+            "Default Welcome Intent" : handle_welcome_intent,
             "attendance.report.fetch - Context: attendance_report" : handle_attendance_fetch,
             "apppointment.booking.helper - context : appointment_booking" : handle_appointment_booking,
             "appointment.details - context : appointment.booking" : handle_appointment_save
