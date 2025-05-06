@@ -9,6 +9,12 @@ from datetime import datetime
 import json
 import psycopg2
 import psycopg2.extras
+import socket
+
+original_getaddrinfo = socket.getaddrinfo
+def getaddrinfo_ipv4(*args, **kwargs):
+    return [info for info in original_getaddrinfo(*args, **kwargs) if info[0] == socket.AF_INET]
+socket.getaddrinfo = getaddrinfo_ipv4
 
 DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:6543/postgres"
 
