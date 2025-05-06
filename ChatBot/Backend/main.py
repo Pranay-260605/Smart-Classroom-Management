@@ -1,10 +1,3 @@
-import socket
-
-original_getaddrinfo = socket.getaddrinfo
-def getaddrinfo_ipv4(*args, **kwargs):
-    return [info for info in original_getaddrinfo(*args, **kwargs) if info[0] == socket.AF_INET]
-socket.getaddrinfo = getaddrinfo_ipv4
-
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 import uvicorn
@@ -17,7 +10,7 @@ import json
 import psycopg2
 import psycopg2.extras
 
-DB_URL = "postgresql://postgres:pgoel2010@db.iocnbbqkijfuqjuikmfn.supabase.co:6543/postgres"
+DB_URL = "postgresql://postgres.iocnbbqkijfuqjuikmfn:pgoel2010@aws-0-ap-south-1.pooler.supabase.com:5432/postgres"
 
 app = FastAPI()
 
